@@ -527,13 +527,11 @@ public class Product extends javax.swing.JFrame {
         String bcode = jTFBarcode.getText();
         String status = jCBStatus.getSelectedItem().toString();
         
-        
         if (product.isEmpty() || des.isEmpty()  || cost.isEmpty() || retail.isEmpty() || qty.isEmpty() || bcode.isEmpty() || status.isEmpty()) {
             JOptionPane.showMessageDialog(null, "All fields are required!");
             return;
         }
          
-        
         try {
             
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");  //connects with the database
@@ -550,7 +548,6 @@ public class Product extends javax.swing.JFrame {
             stm.setString(8, bcode);
             stm.setString(9, status);
             
-            
             stm.executeUpdate(); // runs the sql statement
             JOptionPane.showMessageDialog(null,"Product added!"); //displays message
              
@@ -564,7 +561,6 @@ public class Product extends javax.swing.JFrame {
             jTFBarcode.setText("");
             jCBStatus.setSelectedIndex(-1);
             
-            
             jTFProduct_Name.requestFocus(); //set focus on this Textfield
             show_table_data(); //calling a method that is pre defined above to show data in the table
             
@@ -572,13 +568,10 @@ public class Product extends javax.swing.JFrame {
             stm.close();
             conn.close();
             
-            
         }catch (SQLException ex) {
             Logger.getLogger(Product.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Error adding product: " + ex.getMessage());
         }
-        
-        
         
     }//GEN-LAST:event_jButton_AddActionPerformed
 
@@ -638,7 +631,6 @@ public class Product extends javax.swing.JFrame {
             Logger.getLogger(Product.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
     }//GEN-LAST:event_jButton_EditActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -660,7 +652,7 @@ public class Product extends javax.swing.JFrame {
                 break;
             }
         }
-
+        
         // Match the brand in the combo box by name
         for (int i = 0; i < jCBBrand.getItemCount(); i++) {
             BrandItem brand = (BrandItem) jCBBrand.getItemAt(i);
@@ -711,7 +703,6 @@ public class Product extends javax.swing.JFrame {
                 show_table_data();
 
                 conn.close();
-
 
             } catch (SQLException ex) {
                 Logger.getLogger(Product.class.getName()).log(Level.SEVERE, null, ex);
