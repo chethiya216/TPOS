@@ -1,2 +1,2 @@
 # TPOS
-A simple POS System that manages inventory and transactions
+VTA Assignment - A simple POS System that manages inventory and transactions
