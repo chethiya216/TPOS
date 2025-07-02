@@ -143,10 +143,10 @@ public class Category extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 14))); // NOI18N
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel9.setText("Category :");
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel10.setText("Status :");
 
         jTFCategory.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -154,7 +154,7 @@ public class Category extends javax.swing.JFrame {
         jCBStatus.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jCBStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
 
-        jButton_Add.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton_Add.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton_Add.setIcon(new javax.swing.ImageIcon(getClass().getResource("/TPOS/icons/add.png"))); // NOI18N
         jButton_Add.setText("Add");
         jButton_Add.addActionListener(new java.awt.event.ActionListener() {
@@ -163,7 +163,7 @@ public class Category extends javax.swing.JFrame {
             }
         });
 
-        jButton_Edit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton_Edit.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton_Edit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/TPOS/icons/edit.png"))); // NOI18N
         jButton_Edit.setText("Edit");
         jButton_Edit.addActionListener(new java.awt.event.ActionListener() {
@@ -172,7 +172,7 @@ public class Category extends javax.swing.JFrame {
             }
         });
 
-        jButon_Delete.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButon_Delete.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButon_Delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/TPOS/icons/cancel.png"))); // NOI18N
         jButon_Delete.setText("Delete");
         jButon_Delete.addActionListener(new java.awt.event.ActionListener() {
@@ -188,23 +188,23 @@ public class Category extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(jButton_Add)
-                .addGap(18, 20, Short.MAX_VALUE)
+                .addGap(18, 31, Short.MAX_VALUE)
                 .addComponent(jButton_Edit, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButon_Delete)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jCBStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTFCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

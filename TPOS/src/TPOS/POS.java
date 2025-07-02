@@ -195,17 +195,17 @@ public class POS extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 14))); // NOI18N
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel9.setText("Product Code :");
 
-        jTFProduct_Code.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jTFProduct_Code.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jTFProduct_Code.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTFProduct_CodeKeyPressed(evt);
             }
         });
 
-        jButton_Add.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton_Add.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton_Add.setIcon(new javax.swing.ImageIcon(getClass().getResource("/TPOS/icons/add.png"))); // NOI18N
         jButton_Add.setText("Add");
         jButton_Add.addActionListener(new java.awt.event.ActionListener() {
@@ -214,22 +214,22 @@ public class POS extends javax.swing.JFrame {
             }
         });
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel10.setText("Price :");
 
-        jTFPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jTFPrice.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        jTFQty.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jTFQty.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel11.setText("Product Name :");
 
-        jTFProduct_Name.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jTFProduct_Name.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel12.setText("Qty :");
 
-        jButon_Delete.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButon_Delete.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButon_Delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/TPOS/icons/cancel.png"))); // NOI18N
         jButon_Delete.setText("Delete");
         jButon_Delete.addActionListener(new java.awt.event.ActionListener() {
@@ -243,7 +243,7 @@ public class POS extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(59, 59, 59)
+                .addGap(62, 62, 62)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTFPrice, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTFProduct_Code, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -259,12 +259,12 @@ public class POS extends javax.swing.JFrame {
                 .addComponent(jButton_Add, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(61, 61, 61)
                 .addComponent(jButon_Delete)
-                .addGap(58, 58, 58))
+                .addGap(55, 55, 55))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(17, 17, 17)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel9)
@@ -287,10 +287,10 @@ public class POS extends javax.swing.JFrame {
                                 .addComponent(jButon_Delete)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTFQty, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jTable1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -321,22 +321,22 @@ public class POS extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel13.setText("Sub Total :");
 
-        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel14.setText("Pay :");
 
-        jTFSubT.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jTFSubT.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        jTFPay.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jTFPay.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel15.setText("Balance :");
 
-        jTFBalance.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jTFBalance.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        jButon_PayInvoice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButon_PayInvoice.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButon_PayInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/TPOS/icons/pay.png"))); // NOI18N
         jButon_PayInvoice.setText("Pay invoice");
         jButon_PayInvoice.addActionListener(new java.awt.event.ActionListener() {
@@ -348,30 +348,30 @@ public class POS extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(0, 51, 255));
 
-        jLableUname.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLableUname.setForeground(new java.awt.Color(0, 204, 51));
+        jLableUname.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLableUname.setForeground(new java.awt.Color(51, 51, 51));
         jLableUname.setText("#");
 
-        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(0, 0, 0));
         jLabel18.setText("User:");
 
         jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/TPOS/icons/TPOS Logo.png"))); // NOI18N
 
-        jLableDate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLableDate.setForeground(new java.awt.Color(0, 204, 51));
+        jLableDate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLableDate.setForeground(new java.awt.Color(51, 51, 51));
         jLableDate.setText("#");
 
-        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(0, 0, 0));
         jLabel20.setText("Date :");
 
-        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(0, 0, 0));
         jLabel21.setText("Time :");
 
-        jLableTime.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLableTime.setForeground(new java.awt.Color(0, 204, 51));
+        jLableTime.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLableTime.setForeground(new java.awt.Color(51, 51, 51));
         jLableTime.setText("#");
 
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/TPOS/icons/cancel.png"))); // NOI18N
@@ -436,7 +436,7 @@ public class POS extends javax.swing.JFrame {
                                 .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
+                        .addContainerGap(19, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -475,10 +475,10 @@ public class POS extends javax.swing.JFrame {
                             .addComponent(jLabel15))
                         .addGap(3, 3, 3)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTFPay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTFBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTFPay, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTFBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButon_PayInvoice))))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
