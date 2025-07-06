@@ -980,7 +980,7 @@ public class POS extends javax.swing.JFrame {
                 errorMessageTimer.start();
             }
         } catch (NumberFormatException ex) {
-            jLabelError.setText("⚠️Invalid quantity format!");
+            jLabelError.setText("️Invalid quantity format!");
             errorMessageTimer.start();
         }
         
