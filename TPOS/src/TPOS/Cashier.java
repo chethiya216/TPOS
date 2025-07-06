@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.util.Vector;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,6 +32,9 @@ public class Cashier extends javax.swing.JFrame {
     }
     
     String lname;
+    
+    Timer errorMessageTimer;
+    private final int MESSAGE_DURATION = 5000;
     
     public Cashier(String name) {
            initComponents();   
@@ -71,6 +75,7 @@ public class Cashier extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jLabelError = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 204, 0));
@@ -288,6 +293,9 @@ public class Cashier extends javax.swing.JFrame {
             }
         });
 
+        jLabelError.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabelError.setForeground(new java.awt.Color(255, 51, 51));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -300,7 +308,9 @@ public class Cashier extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(741, Short.MAX_VALUE))
+                                .addGap(267, 267, 267)
+                                .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
@@ -321,8 +331,12 @@ public class Cashier extends javax.swing.JFrame {
                         .addGap(25, 25, 25)
                         .addComponent(jLabel8))
                     .addComponent(jButton1))
-                .addGap(23, 23, 23)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -334,6 +348,14 @@ public class Cashier extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void error(){
+        errorMessageTimer = new Timer(MESSAGE_DURATION, e ->{
+            jLabelError.setText("");
+            errorMessageTimer.stop();
+        });
+        errorMessageTimer.setRepeats(false);
+    }
+    
     private void show_table_data(){
     
         int c;
@@ -374,7 +396,14 @@ public class Cashier extends javax.swing.JFrame {
     }
     
     private void jButton_AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddActionPerformed
-       
+        errorMessageTimer = new Timer(MESSAGE_DURATION,e->{
+            jLabelError.setText("");
+            errorMessageTimer.stop();
+            
+        });
+        errorMessageTimer.setRepeats(false);
+        
+        DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
         String user = jTFUsername.getText();
         String pass = jPFPassword.getText();
         String status = jCBStatus.getSelectedItem().toString();
@@ -382,21 +411,47 @@ public class Cashier extends javax.swing.JFrame {
         try {
             
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");  //connects with the database
-            String sql = "INSERT INTO Cashier(Username, Password, Status) VALUES (?, ?, ?)"; //inserts data into database
-            stm = conn.prepareStatement(sql); //prepares a statement to run the query instead of compiling first
-            stm.setString(1, user); //set values
-            stm.setString(2, pass);
-            stm.setString(3, status); //set values
-            stm.executeUpdate(); // runs the sql statement
-            JOptionPane.showMessageDialog(null,"User added!!"); //displays message
-             
-            jTFUsername.setText(""); //refreshes data fields
-            jPFPassword.setText("");
-            jCBStatus.setSelectedIndex(-1); //refreshes data fields
-            jTFUsername.requestFocus(); //set focus on this Textfield
             
+            String checkSql = "SELECT Username FROM Cashier WHERE Username = ?";
+            stm = conn.prepareStatement(checkSql);
+            stm.setString(1, user);
+            rs = stm.executeQuery();
             
+            if (rs.next()) {
+                jLabelError.setText("User already added!");
+                errorMessageTimer.start();
+                return;
+            }
             
+//            int selectedRow = jTable1.getSelectedRow();
+            
+            if (user.isEmpty()) {
+                jLabelError.setText("Please Insert Username!");
+                errorMessageTimer.start();
+                return;
+            }else if(pass.isEmpty()){
+                jLabelError.setText("Please Insert Password!");
+                errorMessageTimer.start();
+                return;
+            }else if (user.isEmpty() || pass.isEmpty()) {
+                jLabelError.setText("Please Insert Username and Password!");
+                errorMessageTimer.start();
+                return;
+            }else{
+                String sql = "INSERT INTO Cashier(Username, Password, Status) VALUES (?, ?, ?)"; //inserts data into database
+                stm = conn.prepareStatement(sql); //prepares a statement to run the query instead of compiling first
+                stm.setString(1, user); //set values
+                stm.setString(2, pass);
+                stm.setString(3, status); //set values
+                stm.executeUpdate(); // runs the sql statement
+                JOptionPane.showMessageDialog(null,"User added!!"); //displays message
+
+                jTFUsername.setText(""); //refreshes data fields
+                jPFPassword.setText("");
+                jCBStatus.setSelectedIndex(-1); //refreshes data fields
+                jTFUsername.requestFocus(); //set focus on this Textfield
+            }
+
             show_table_data(); //calling a method that is pre defined above to show data in the table
             
             conn.close();//closes the connection
@@ -411,9 +466,16 @@ public class Cashier extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_AddActionPerformed
 
     private void jButton_EditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_EditActionPerformed
+        error();
         
         DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
         int selectIndex = jTable1.getSelectedRow();
+        
+        if (selectIndex == -1) {
+            jLabelError.setText("Please select a User to update!");
+            errorMessageTimer.start();
+            return;
+        }
             
         int id = Integer.parseInt(d.getValueAt(selectIndex, 0).toString());
         String user = jTFUsername.getText();
@@ -483,10 +545,18 @@ public class Cashier extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButon_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButon_DeleteActionPerformed
+        error();
         
         DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
         
         int selectIndex = jTable1.getSelectedRow();
+        
+        if (selectIndex == -1) {
+            jLabelError.setText("Please select a User to Delete!");
+            errorMessageTimer.start();
+            return;
+        }
+        
         int id = Integer.parseInt(d.getValueAt(selectIndex, 0).toString());
         int dialogResult = JOptionPane.showConfirmDialog(null, "Do you want to Delete the Record?","Warning",JOptionPane.YES_NO_OPTION);
         
@@ -619,6 +689,7 @@ public class Cashier extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelError;
     private javax.swing.JPasswordField jPFPassword;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
