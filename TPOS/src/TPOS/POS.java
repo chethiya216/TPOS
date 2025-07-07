@@ -538,158 +538,161 @@ public class POS extends javax.swing.JFrame {
 
     private void pos(){
         errorMessage();
-        
         tb1 = (DefaultTableModel)jTable1.getModel();
-        try {
-            String pcode = jTFProduct_Code.getText();
-            String pName = jTFProduct_Name.getText();   
-            String strPrice = jTFPrice.getText();
-            int price = Integer.parseInt(jTFPrice.getText());
-            int new_qty = Integer.parseInt(jTFQty.getText());
-
-            if (pcode.isEmpty()) {
-                jLabelError.setText("Enter product code and then press Enter!");
-                errorMessageTimer.start();
-                return;
-            }else if (pName.isEmpty()) {
-                jLabelError.setText("Enter product name and then press Enter!");
-                errorMessageTimer.start();
-                return;
-            }else if (strPrice.isEmpty()) {
-                jLabelError.setText("Enter product price and then press Enter!");
-                errorMessageTimer.start();
-                return;
-            }else{
-
+           
+        String pcode = jTFProduct_Code.getText();
+        String pName = jTFProduct_Name.getText();
+        String strPrice = jTFPrice.getText();
+        String qty = jTFQty.getText();
+        
+        if (pcode.isEmpty()) {
+            jLabelError.setText("Enter product code and then press Enter!");
+            errorMessageTimer.start();
+            return;
+        }
+        
+        if (pName.isEmpty()) {
+            jLabelError.setText("Enter product name!");
+            errorMessageTimer.start();
+            return;
+        }
+        
+        if (strPrice.isEmpty()) {
+            jLabelError.setText("Enter product price!");
+            errorMessageTimer.start();
+            return;
+        }
+        
+        if (qty.isEmpty()) {
+            jLabelError.setText("Enter product qty!");
+            errorMessageTimer.start();
+            return;
+        }
+        
+        boolean productExists = false;
+        for (int i = 0; i < tb1.getRowCount(); i++) {
+            String existingCode = tb1.getValueAt(i, 0).toString();
+            if (existingCode.equals(pcode)) {
+                productExists = true;
+                break;
             }
+        }
+        
+        if (productExists) {
+            jLabelError.setText("Product already added to the table!");
+            errorMessageTimer.start();
+            return;
+        }
+            
+            try {
+                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");
+                insert = conn.prepareStatement("Select * from Product where Barcode = ?");
+                insert.setString(1, pcode);
+                rs = insert.executeQuery(); 
 
-            boolean productExists = false;
-            for (int i = 0; i < tb1.getRowCount(); i++) {
-                String existingCode = tb1.getValueAt(i, 0).toString();
-                if (existingCode.equals(pcode)) {
-                    productExists = true;
-                    break;
-                }
-            }
+            while (rs.next()) {       
+                
+                int current_qty;
+                current_qty = rs.getInt("Qty");
 
-            if (productExists) {
-                jLabelError.setText("Product already added to the table!");
-                errorMessageTimer.start();
-                return;
-            }
+                if(current_qty == 0){  
+                    jLabelError.setText("This product stock is empty!!! Restock NOW!!!");
+                    return;
 
-                try {
-                    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");
-                    insert = conn.prepareStatement("Select * from Product where Barcode = ?");
-                    insert.setString(1, pcode);
-                    rs = insert.executeQuery(); 
+                }else if(current_qty < 10){
+                    jLabelError.setText(current_qty +" items available!!! Please restock!!!");
+                    errorMessageTimer.start();
+                    
+                    int price = Integer.parseInt(jTFPrice.getText());
+                    int new_qty = Integer.parseInt(jTFQty.getText());
 
-                while (rs.next()) {       
+                    int tot = price * new_qty;
 
-                    int current_qty;
-                    current_qty = rs.getInt("Qty");
-
-                    if(current_qty == 0){  
-                        jLabelError.setText("This product stock is empty!!! Restock NOW!!!");
+                    if(new_qty > current_qty ){
+//                        JOptionPane.showMessageDialog(this, "Quantity is not enough!!!  " + current_qty + "  Available in stock");
+                        jLabelError.setText("Quantity is not enough!!!  " + current_qty + "  Available in stock");
+                        errorMessageTimer.start();
                         return;
 
-                    }else if(current_qty < 10){
-                        jLabelError.setText("Less than 10 items available!!! Please restock!!!");
-                        errorMessageTimer.start();
-
-
-
-                        int tot = price * new_qty;
-
-                        if(new_qty > current_qty ){
-    //                        JOptionPane.showMessageDialog(this, "Quantity is not enough!!!  " + current_qty + "  Available in stock");
-                            jLabelError.setText("Quantity is not enough!!!  " + current_qty + "  Available in stock");
-                            errorMessageTimer.start();
-                            return;
-
+                    }
+                    else{
+                        
+                        if (new_qty == current_qty) {
+                            jLabelError.setText("0 Available in stock! RESTOCK NOW!!!");
                         }
-                        else{
+                        
+                        tb1 = (DefaultTableModel)jTable1.getModel();
+                        tb1.addRow(new Object[]{
+                            jTFProduct_Code.getText(),
+                            jTFProduct_Name.getText(),
+                            jTFPrice.getText(),
+                            jTFQty.getText(),
+                            tot,
+                        });
 
-                            if (new_qty == current_qty) {
-                                jLabelError.setText("0 Available in stock! RESTOCK NOW!!!");
-                            }
+                        int sum = 0;
 
-                            tb1 = (DefaultTableModel)jTable1.getModel();
-                            tb1.addRow(new Object[]{
-                                jTFProduct_Code.getText(),
-                                jTFProduct_Name.getText(),
-                                jTFPrice.getText(),
-                                jTFQty.getText(),
-                                tot,
-                            });
-
-                            int sum = 0;
-
-                            for(int i = 0; i < jTable1.getRowCount(); i++){
-                                sum = sum + Integer.parseInt(jTable1.getValueAt(i, 4).toString());
-                            }
-
-                            jTFSubT.setText(Integer.toString(sum));
-                            jTFProduct_Code.setText("");
-                            jTFProduct_Name.setText("");
-                            jTFPrice.setText("");
-                            jTFQty.setText("");
-
+                        for(int i = 0; i < jTable1.getRowCount(); i++){
+                            sum = sum + Integer.parseInt(jTable1.getValueAt(i, 4).toString());
                         }
 
-                    }else{
-                        jLabelError.setText("");
-
-    //                    int price = Integer.parseInt(jTFPrice.getText());
-    //                    int new_qty = Integer.parseInt(jTFQty.getText());
-
-                        int tot = price * new_qty;
-
-
-                        if(new_qty >= current_qty ){
-    //                        JOptionPane.showMessageDialog(this, "Quantity is not enough!!!  " + current_qty + "  Available in stock");
-    //                        JOptionPane.showMessageDialog(this, "Quantity is not enough!!!");
-                            jLabelError.setText("Only " + current_qty +" available in stock!");
-                            errorMessageTimer.start();
-                            return;
-
-                        }else{
-                            tb1 = (DefaultTableModel)jTable1.getModel();
-                            tb1.addRow(new Object[]{
-                                jTFProduct_Code.getText(),
-                                jTFProduct_Name.getText(),
-                                jTFPrice.getText(),
-                                jTFQty.getText(),
-                                tot,
-                            });
-
-                            int sum = 0;
-
-                            for(int i = 0; i < jTable1.getRowCount(); i++){
-                                sum = sum + Integer.parseInt(jTable1.getValueAt(i, 4).toString());
-                            }
-
-                            jTFSubT.setText(Integer.toString(sum));
-                            jTFProduct_Code.setText("");
-                            jTFProduct_Name.setText("");
-                            jTFPrice.setText("");
-                            jTFQty.setText("");
-
-                               // jTFPay
-
-                        }
+                        jTFSubT.setText(Integer.toString(sum));
+                        jTFProduct_Code.setText("");
+                        jTFProduct_Name.setText("");
+                        jTFPrice.setText("");
+                        jTFQty.setText("");
 
                     }
-                }
+                
+                }else{
+                    jLabelError.setText("");
+                    
+                    int price = Integer.parseInt(jTFPrice.getText());
+                    int new_qty = Integer.parseInt(jTFQty.getText());
 
+                    int tot = price * new_qty;
+                    
 
-                } catch (SQLException ex) {
-                    Logger.getLogger(POS.class.getName()).log(Level.SEVERE, null, ex);
+                    if(new_qty >= current_qty ){
+//                        JOptionPane.showMessageDialog(this, "Quantity is not enough!!!  " + current_qty + "  Available in stock");
+//                        JOptionPane.showMessageDialog(this, "Quantity is not enough!!!");
+                        jLabelError.setText("Only " + current_qty +" available in stock!");
+                        errorMessageTimer.start();
+                        return;
+
+                    }else{
+                        tb1 = (DefaultTableModel)jTable1.getModel();
+                        tb1.addRow(new Object[]{
+                            jTFProduct_Code.getText(),
+                            jTFProduct_Name.getText(),
+                            jTFPrice.getText(),
+                            jTFQty.getText(),
+                            tot,
+                        });
+
+                        int sum = 0;
+
+                        for(int i = 0; i < jTable1.getRowCount(); i++){
+                            sum = sum + Integer.parseInt(jTable1.getValueAt(i, 4).toString());
+                        }
+
+                        jTFSubT.setText(Integer.toString(sum));
+                        jTFProduct_Code.setText("");
+                        jTFProduct_Name.setText("");
+                        jTFPrice.setText("");
+                        jTFQty.setText("");
+
+                           // jTFPay
+
+                    }
+                
                 }
-        } catch (NumberFormatException ex) {
-            jLabelError.setText("️Invalid quantity format!");
-            errorMessageTimer.start();
-        }
+            }
+
+ 
+            } catch (SQLException ex) {
+                Logger.getLogger(POS.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
     
     }
@@ -781,7 +784,7 @@ public class POS extends javax.swing.JFrame {
     }
     
     // Show confirmation dialog first
-    int dialogResult = JOptionPane.showConfirmDialog(null, "Do you want to Delete the Record?","Warning",JOptionPane.YES_NO_OPTION);
+    int dialogResult = JOptionPane.showConfirmDialog(null, "Do you want to Delete product item from table?","Warning",JOptionPane.YES_NO_OPTION);
     
     if(dialogResult == JOptionPane.YES_OPTION){
         // Remove row from table
@@ -1001,9 +1004,10 @@ public class POS extends javax.swing.JFrame {
             errorMessageTimer.start();
             return;
         }
-
+        
         try {
             int newQty = Integer.parseInt(newQtyStr);
+            
             if (newQty <= 0) {
                 jLabelError.setText("Quantity must be greater than 0!");
                 errorMessageTimer.start();
@@ -1018,12 +1022,21 @@ public class POS extends javax.swing.JFrame {
                 stm = conn.prepareStatement("SELECT Qty FROM Product WHERE Barcode = ?");
                 stm.setString(1, barcode);
                 rs = stm.executeQuery();
+                
+                
 
                 if (rs.next()) {
                     int currentStock = rs.getInt("Qty");
                     int originalQty = Integer.parseInt(tb1.getValueAt(selectedRow, 3).toString());
                     int stockAdjustment = originalQty - newQty;
                     int newStock = currentStock + stockAdjustment;
+                    int maxAllow = currentStock;
+                    
+                    if (newQty > maxAllow) {
+                        jLabelError.setText("Insufficient stock! Max allowed: " + maxAllow);
+                        errorMessageTimer.start();
+                        return;
+                    }
 
                     if (newStock < 0) {
                         int maxAllowed = currentStock + originalQty;
