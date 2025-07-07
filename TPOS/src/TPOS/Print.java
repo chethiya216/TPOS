@@ -4,6 +4,7 @@
  */
 package TPOS;
 
+import java.awt.Font;
 import java.awt.print.PrinterException;
 import javax.swing.table.TableModel;
 
@@ -26,47 +27,115 @@ public class Print extends javax.swing.JFrame {
     String lbal;
     String qty;
     
-    public Print(String sub, String pay,String bal,String qty,TableModel tableModel) throws PrinterException {
+    public Print(String sub, String pay, String bal, TableModel tableModel, 
+             String cashierName, String transactionId, String dateTime) throws PrinterException {
         initComponents();
-        
-        this.lsub = sub;
-        this.lpay = pay;
-        this.lbal = bal;
-        this.qty = qty;
-        
 
-        jTFPrint.setText(jTFPrint.getText()+ "***********************************************************\n");
-        jTFPrint.setText(jTFPrint.getText()+ "******************* TransactEase POS ******************\n");
-        jTFPrint.setText(jTFPrint.getText()+ "\n");
-        jTFPrint.setText(jTFPrint.getText()+ "Product" + "\t" + "       Price" + "\t" + "   Qty" + "\t" +"Total" + "\n");
+        // Set monospaced font for proper alignment
+        jTFPrint.setFont(new Font("Monospaced", Font.PLAIN, 12));
+
+        StringBuilder receipt = new StringBuilder();
+        int totalWidth = 60;
+        // Header section
         
-        for(int i = 0; i<tableModel.getRowCount(); i++){
-        
+        receipt.append("=======================================================\n");
+//        receipt.append(("                   CMart Store\n"));
+        receipt.append(centerText("CMart Store", totalWidth)).append("\n");
+//        receipt.append("              123 Main Street, City\n");
+        receipt.append(centerText("123 Main Street, City", totalWidth)).append("\n");
+//        receipt.append("               Phone: (+94) 779872446\n");
+        receipt.append(centerText("Phone: (123) 456-7890", totalWidth)).append("\n\n");
+//        receipt.append("\n");
+//        receipt.append("                 ").append(dateTime).append("\n");
+        receipt.append(centerText(dateTime, totalWidth)).append("\n");
+//        receipt.append("            Transaction ID: ").append(transactionId).append("\n");
+//        receipt.append("                    Cashier: ").append(cashierName).append("\n");
+//        receipt.append("-------------------------------------------------------\n");
+        receipt.append(String.format("%s%18s", "Transaction ID:", transactionId)).append("\n");
+        receipt.append(String.format("%s%22s", "Cashier:", cashierName)).append("\n");
+        receipt.append("-".repeat(totalWidth)).append("\n");
+
+        // Column headers with proper spacing
+        receipt.append(String.format("%5s %20s %8s %18s", "ITEM", "PRICE", "QTY", "TOTAL")).append("\n");
+        receipt.append("-------------------------------------------------------\n");
+
+        // Item rows and total items calculation
+        int totalItems = 0;
+        double subtotalValue = 0;
+
+//        for(int i = 0; i < tableModel.getRowCount(); i++) {
+//            String product = (String) tableModel.getValueAt(i, 1);
+//            // Truncate long product names
+//            if(product.length() > 20) {
+//                product = product.substring(0, 17) + "...";
+//            }
+//
+//            String price = (String) tableModel.getValueAt(i, 2);
+//            String qty = (String) tableModel.getValueAt(i, 3);
+//            int total = (int) tableModel.getValueAt(i, 4);
+//
+//            totalItems += Integer.parseInt(qty);
+//            subtotalValue += total;
+//
+//            receipt.append(String.format("%5s %20s %8s %18s", 
+//                product, 
+//                formatCurrency(price), 
+//                qty, 
+//                formatCurrency(String.valueOf(total)))).append("\n");
+//        }
+         for(int i = 0; i < tableModel.getRowCount(); i++) {
             String product = (String) tableModel.getValueAt(i, 1);
+            // Truncate long product names
+            if(product.length() > 20) {
+                product = product.substring(0, 17) + "...";
+            }
+
             String price = (String) tableModel.getValueAt(i, 2);
-            String bqty = (String) tableModel.getValueAt(i, 3);
+            String qty = (String) tableModel.getValueAt(i, 3);
             int total = (int) tableModel.getValueAt(i, 4);
-            
-            jTFPrint.setText(jTFPrint.getText()+ product + "\t" + "       " +price + "\t" + "     "+bqty + "\t"+ total+ "  \n" );
 
+            totalItems += Integer.parseInt(qty);
+            subtotalValue += total;
+
+            // Format row with fixed spacing
+            receipt.append(String.format("%5s %20s %8s %18s", 
+                product, 
+                formatCurrency(price), 
+                qty, 
+                formatCurrency(String.valueOf(total)))).append("\n");
         }
-        
-        jTFPrint.setText(jTFPrint.getText()+ "\n");
-        jTFPrint.setText(jTFPrint.getText()+ "\n");
 
-        
-        jTFPrint.setText(jTFPrint.getText()+ "               " + "SubTotal : " + sub + "\n");
-        jTFPrint.setText(jTFPrint.getText()+ "               " + "Pay : " + pay + "\n");
-        jTFPrint.setText(jTFPrint.getText()+ "               " + "Balance : " + bal + "\n");
-        
-        jTFPrint.setText(jTFPrint.getText()+ "\n");
-        
-        jTFPrint.setText(jTFPrint.getText()+ "***********************************************************\n");
-        jTFPrint.setText(jTFPrint.getText()+ "                      Thank You!!!, Come Again...\n"); 
-        jTFPrint.setText(jTFPrint.getText()+ "***********************************************************\n");
-        
+            // Footer section
+        receipt.append("-------------------------------------------------------\n");
+        receipt.append(String.format("%20s %10s", "TOTAL ITEMS:", totalItems)).append("\n");
+        receipt.append(String.format("%20s %10s", "SUBTOTAL:", formatCurrency(sub))).append("\n");
+        receipt.append(String.format("%20s %10s", "PAYMENT:", formatCurrency(pay))).append("\n");
+        receipt.append(String.format("%20s %10s", "BALANCE:", formatCurrency(bal))).append("\n");
+        receipt.append("=======================================================\n");
+        receipt.append("          Thank you for shopping with us!\n");
+        receipt.append("     Returns accepted within 7 days with receipt\n");
+        receipt.append("           Visit us online: www.cmart.com\n");
+        receipt.append("=======================================================\n");
+
+        jTFPrint.setText(receipt.toString());
         jTFPrint.print();
-        
+    }
+    
+    private String formatCurrency(String amount) {
+        try {
+            double value = Double.parseDouble(amount);
+            return String.format("Rs: %,.2f", value);
+        } catch (NumberFormatException e) {
+            return amount; // Return original if formatting fails
+        }
+    }
+    
+    private String centerText(String text, int width) {
+        if (text.length() >= width) {
+            return text.substring(0, width);
+        }
+        int padding = (width - text.length()) / 2;
+        return " ".repeat(padding) + text + " ".repeat(width - text.length() - padding);
     }
     
 
