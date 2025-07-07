@@ -1003,8 +1003,8 @@ public class POS extends javax.swing.JFrame {
                             jTFProduct_Name.setText("");
                             jTFPrice.setText("");
                             jTFQty.setText("");
-                            jLabelError.setText("Item updated in sale!");
-                            errorMessageTimer.start();
+//                            jLabelError.setText("Item updated in sale!");
+//                            errorMessageTimer.start();
                             JOptionPane.showMessageDialog(null, "Item updated successfully!");
                         }
                     }

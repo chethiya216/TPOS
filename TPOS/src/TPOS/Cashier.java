@@ -396,12 +396,7 @@ public class Cashier extends javax.swing.JFrame {
     }
     
     private void jButton_AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddActionPerformed
-        errorMessageTimer = new Timer(MESSAGE_DURATION,e->{
-            jLabelError.setText("");
-            errorMessageTimer.stop();
-            
-        });
-        errorMessageTimer.setRepeats(false);
+        error();
         
         DefaultTableModel d = (DefaultTableModel) jTable1.getModel();
         String user = jTFUsername.getText();
