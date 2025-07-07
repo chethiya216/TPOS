@@ -31,7 +31,7 @@ public class Brand extends javax.swing.JFrame {
         show_table_data();
     }
 
-    PreparedStatement pst;
+    PreparedStatement pst,stm;
     Connection conn;
     DefaultTableModel d;
     ResultSet rs;
@@ -406,6 +406,7 @@ public class Brand extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_AddActionPerformed
 
     private void jButton_EditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_EditActionPerformed
+        errorMessage();
         
         DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
         int selectIndex = jTable1.getSelectedRow();
@@ -420,13 +421,17 @@ public class Brand extends javax.swing.JFrame {
         String brand = jTFBrand.getText();
         String status = jCBStatus.getSelectedItem().toString();
         
-        
+        if (brand.isEmpty()) {
+            jLabelError.setText("Please enter a Brand to update!");
+            errorMessageTimer.start();
+            return;
+        }
         
         try {
 
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");
             String sql = "UPDATE Brand SET Brand=?,Status=? WHERE id = ?";
-            PreparedStatement stm = conn.prepareStatement(sql);
+            stm = conn.prepareStatement(sql);
             stm.setString(1, brand);
             stm.setString(2, status);
             stm.setInt(3, id);
