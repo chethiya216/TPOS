@@ -79,6 +79,15 @@ public class POS extends javax.swing.JFrame {
     Timer errorMessageTimer;
     private final int ERROR_MESSAGE_DURATION = 5000; 
     
+    private void errorMessage(){
+        errorMessageTimer = new Timer(ERROR_MESSAGE_DURATION, e->{
+            jLabelError.setText("");
+            errorMessageTimer.stop();
+        });
+        errorMessageTimer.setRepeats(false);
+    
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -522,30 +531,51 @@ public class POS extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void pos(){
-        errorMessageTimer = new Timer(ERROR_MESSAGE_DURATION, e->{
-            jLabelError.setText("");
-            errorMessageTimer.stop();
-        });
-        errorMessageTimer.setRepeats(false);
+        errorMessage();
+        tb1 = (DefaultTableModel)jTable1.getModel();
+        int selectIndex = jTable1.getSelectedRow();
+           
+        String pcode = jTFProduct_Code.getText();
+//        String pName = jTFProduct_Name.getText();             
         
-        String name = jTFProduct_Code.getText();
+        if (pcode.isEmpty()) {
+            jLabelError.setText("Enter product code and then press Enter!");
+            errorMessageTimer.start();
+            return;
+        }
         
+        boolean productExists = false;
+        for (int i = 0; i < tb1.getRowCount(); i++) {
+            String existingCode = tb1.getValueAt(i, 0).toString();
+            if (existingCode.equals(pcode)) {
+                productExists = true;
+                break;
+            }
+        }
+        
+        if (productExists) {
+            jLabelError.setText("Product already added to the table!");
+            errorMessageTimer.start();
+            return;
+        }
             
             try {
                 conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");
                 insert = conn.prepareStatement("Select * from Product where Barcode = ?");
-                insert.setString(1, name);
+                insert.setString(1, pcode);
                 rs = insert.executeQuery(); 
 
-            while (rs.next()) {                    
+            while (rs.next()) {       
+                
                 int current_qty;
                 current_qty = rs.getInt("Qty");
 
                 if(current_qty == 0){  
                     jLabelError.setText("This product stock is empty!!! Restock NOW!!!");
+                    return;
 
                 }else if(current_qty < 10){
-                    jLabelError.setText("Less than 10 items vailable!!! Please restock!!!");
+                    jLabelError.setText("Less than 10 items available!!! Please restock!!!");
                     errorMessageTimer.start();
                     
                     int price = Integer.parseInt(jTFPrice.getText());
@@ -557,9 +587,15 @@ public class POS extends javax.swing.JFrame {
 //                        JOptionPane.showMessageDialog(this, "Quantity is not enough!!!  " + current_qty + "  Available in stock");
                         jLabelError.setText("Quantity is not enough!!!  " + current_qty + "  Available in stock");
                         errorMessageTimer.start();
+                        return;
 
                     }
                     else{
+                        
+                        if (new_qty == current_qty) {
+                            jLabelError.setText("0 Available in stock! RESTOCK NOW!!!");
+                        }
+                        
                         tb1 = (DefaultTableModel)jTable1.getModel();
                         tb1.addRow(new Object[]{
                             jTFProduct_Code.getText(),
@@ -628,12 +664,11 @@ public class POS extends javax.swing.JFrame {
                 }
             }
 
-
-                
  
             } catch (SQLException ex) {
                 Logger.getLogger(POS.class.getName()).log(Level.SEVERE, null, ex);
             }
+
     
     }
 
@@ -663,7 +698,7 @@ public class POS extends javax.swing.JFrame {
             String code = jTFProduct_Code.getText();
             
             try {
-                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");
+                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");
                 insert = conn.prepareStatement("Select * from Product where Barcode = ?");
                 insert.setString(1, code);
                 rs = insert.executeQuery();
@@ -694,6 +729,16 @@ public class POS extends javax.swing.JFrame {
     }//GEN-LAST:event_jTFProduct_CodeKeyPressed
 
     private void jButon_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButon_DeleteActionPerformed
+     
+        errorMessage();
+        
+        DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
+        int selectIndex = jTable1.getSelectedRow();
+        if (selectIndex == -1) {
+            jLabelError.setText("Please select item to Delete!");
+            errorMessageTimer.start();
+            return;
+        }
         
         tb1.removeRow(jTable1.getSelectedRow());
         
@@ -707,9 +752,6 @@ public class POS extends javax.swing.JFrame {
         
         jTFSubT.setText(Integer.toString(del));
         
-        DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
-        
-        int selectIndex = jTable1.getSelectedRow();
         int id = Integer.parseInt(d.getValueAt(selectIndex, 0).toString());
         int dialogResult = JOptionPane.showConfirmDialog(null, "Do you want to Delete the Record?","Warning",JOptionPane.YES_NO_OPTION);
         
@@ -961,8 +1003,8 @@ public class POS extends javax.swing.JFrame {
                             jTFProduct_Name.setText("");
                             jTFPrice.setText("");
                             jTFQty.setText("");
-                            jLabelError.setText("Item updated in sale!");
-                            errorMessageTimer.start();
+//                            jLabelError.setText("Item updated in sale!");
+//                            errorMessageTimer.start();
                             JOptionPane.showMessageDialog(null, "Item updated successfully!");
                         }
                     }
@@ -980,7 +1022,7 @@ public class POS extends javax.swing.JFrame {
                 errorMessageTimer.start();
             }
         } catch (NumberFormatException ex) {
-            jLabelError.setText("⚠️Invalid quantity format!");
+            jLabelError.setText("️Invalid quantity format!");
             errorMessageTimer.start();
         }
         

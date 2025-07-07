@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.util.Vector;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -30,8 +31,13 @@ public class Category extends javax.swing.JFrame {
         show_table_data();
     }
 
-    PreparedStatement pst;
+    PreparedStatement pst,stm;
     Connection conn;
+    ResultSet rs;
+    DefaultTableModel d;
+    
+    Timer errorMessageTimer;
+    private final int MESSAGE_DURATION = 5000;
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -61,6 +67,7 @@ public class Category extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton5 = new javax.swing.JButton();
+        jLabelError = new javax.swing.JLabel();
 
         jFormattedTextField1.setText("jFormattedTextField1");
 
@@ -248,6 +255,9 @@ public class Category extends javax.swing.JFrame {
             }
         });
 
+        jLabelError.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabelError.setForeground(new java.awt.Color(255, 51, 51));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -258,7 +268,10 @@ public class Category extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(274, 274, 274)
+                                .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -280,7 +293,9 @@ public class Category extends javax.swing.JFrame {
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jButton5))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -291,7 +306,16 @@ public class Category extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    private void errorMessage(){
+        errorMessageTimer = new Timer(MESSAGE_DURATION, e ->{
+            jLabelError.setText("");
+            errorMessageTimer.stop();
+        });
+        errorMessageTimer.setRepeats(false);
+    }
+    
+    
     private void show_table_data(){
     
         int c;
@@ -333,14 +357,36 @@ public class Category extends javax.swing.JFrame {
     
     private void jButton_AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddActionPerformed
        
+        errorMessage();
         String cat = jTFCategory.getText();
         String status = jCBStatus.getSelectedItem().toString();
+        d = (DefaultTableModel)jTable1.getModel();
+        int insertIndex = jTable1.getSelectedRow();
+        
+        if (insertIndex == -1) {
+            jLabelError.setText("Please enter category name!");
+            errorMessageTimer.start();
+            return;
+        }
         
         try {
             
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");  //connects with the database
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");  //connects with the database
+            
+            String checkSql = "SELECT Category FROM Category WHERE Category = ?";
+            stm = conn.prepareStatement(checkSql);
+            stm.setString(1, cat);
+            rs = stm.executeQuery();
+            
+            if (rs.next()) {
+                jLabelError.setText("Category is already Added!");
+                errorMessageTimer.start();
+                return;
+            }
+            
+            
             String sql = "INSERT INTO `category`(Category, Status) VALUES (?, ?)"; //inserts data into database
-            PreparedStatement stm = conn.prepareStatement(sql); //prepares a statement to run the query instead of compiling first
+            stm = conn.prepareStatement(sql); //prepares a statement to run the query instead of compiling first
             stm.setString(1, cat); //set values
             stm.setString(2, status); //set values
             stm.executeUpdate(); // runs the sql statement
@@ -363,19 +409,32 @@ public class Category extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_AddActionPerformed
 
     private void jButton_EditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_EditActionPerformed
+        errorMessage();
         
         DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
         int selectIndex = jTable1.getSelectedRow();
+        
+        if (selectIndex == -1) {
+            jLabelError.setText("Please select a category to Update!");
+            errorMessageTimer.start();
+            return;
+        }
             
         int id = Integer.parseInt(d.getValueAt(selectIndex, 0).toString());
         String cat = jTFCategory.getText();
         String status = jCBStatus.getSelectedItem().toString();
         
+        if (cat.isEmpty()) {
+            jLabelError.setText("Please enter category name!");
+        }
+        
+        
+        
         try {
 
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");
             String sql = "UPDATE `category` SET Category=?,Status=? WHERE id = ?";
-            PreparedStatement stm = conn.prepareStatement(sql);
+            stm = conn.prepareStatement(sql);
             stm.setString(1, cat);
             stm.setString(2, status);
             stm.setInt(3, id);
@@ -410,9 +469,17 @@ public class Category extends javax.swing.JFrame {
 
     private void jButon_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButon_DeleteActionPerformed
         
-        DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
+        errorMessage();
         
+        DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
         int selectIndex = jTable1.getSelectedRow();
+        
+        if (selectIndex == -1) {
+            jLabelError.setText("Please select a category to Delete!");
+            errorMessageTimer.start();
+            return;
+        }
+        
         int id = Integer.parseInt(d.getValueAt(selectIndex, 0).toString());
         int dialogResult = JOptionPane.showConfirmDialog(null, "Do you want to Delete the Record?","Warning",JOptionPane.YES_NO_OPTION);
         
@@ -421,7 +488,7 @@ public class Category extends javax.swing.JFrame {
             try {
                 conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");
                 String sql = "Delete from category WHERE id = ?";
-                PreparedStatement stm = conn.prepareStatement(sql);
+                stm = conn.prepareStatement(sql);
                 stm.setInt(1, id);
                 stm.executeUpdate();
 
@@ -522,6 +589,7 @@ public class Category extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelError;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
