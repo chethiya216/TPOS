@@ -663,6 +663,12 @@ public class Product extends javax.swing.JFrame {
         String bcode = jTFBarcode.getText();
         String status = jCBStatus.getSelectedItem().toString();
         
+        if (product.isEmpty() || des.isEmpty()  || cost.isEmpty() || retail.isEmpty() || qty.isEmpty() || bcode.isEmpty() || status.isEmpty()) {
+            jLabelError.setText("All fields are required  to Update!");
+            errorMessageTimer.start();
+            return;
+        }
+        
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");  //connects with the database
             String sql = "UPDATE product SET Product_Name = ?, Description = ?, Category = ?, Brand =?, Cost_Price =?, Retail_Price =?, Qty =?, Barcode =?, Status =? WHERE ID = ?"; //inserts data into database

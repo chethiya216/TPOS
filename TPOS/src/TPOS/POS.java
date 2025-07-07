@@ -82,6 +82,7 @@ public class POS extends javax.swing.JFrame {
     private void errorMessage(){
         errorMessageTimer = new Timer(ERROR_MESSAGE_DURATION, e->{
             jLabelError.setText("");
+            jLabelSuccess.setText("");
             errorMessageTimer.stop();
         });
         errorMessageTimer.setRepeats(false);
@@ -134,6 +135,7 @@ public class POS extends javax.swing.JFrame {
         jLableTime = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
         jLabelError = new javax.swing.JLabel();
+        jLabelSuccess = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -413,71 +415,73 @@ public class POS extends javax.swing.JFrame {
         jLabelError.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabelError.setForeground(new java.awt.Color(255, 51, 51));
 
+        jLabelSuccess.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabelSuccess.setForeground(new java.awt.Color(51, 204, 0));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel13)
+                                    .addComponent(jTFSubT, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel14)
+                                    .addComponent(jTFPay, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel15)
+                                        .addGap(376, 376, 376))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jTFBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButon_PayInvoice)
+                                        .addGap(16, 16, 16))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane1)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addContainerGap(18, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(166, 166, 166)
-                                                .addComponent(jLabel16))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(311, 311, 311)
-                                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel20)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLableDate)
-                                        .addGap(128, 128, 128)
-                                        .addComponent(jLabel21)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLableTime)
-                                        .addGap(128, 128, 128)
-                                        .addComponent(jLabel18)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLableUname)
-                                        .addGap(128, 128, 128))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(24, 24, 24)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel13)
-                                            .addComponent(jTFSubT, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel14)
-                                            .addComponent(jTFPay, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel15)
-                                                .addGap(376, 376, 376))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jTFBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jButon_PayInvoice)
-                                                .addGap(16, 16, 16))))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jScrollPane1)
-                                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addContainerGap(18, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(340, 340, 340)
+                                        .addGap(166, 166, 166)
+                                        .addComponent(jLabel16))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(311, 311, 311)
+                                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel20)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLableDate)
+                                .addGap(128, 128, 128)
+                                .addComponent(jLabel21)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLableTime)
+                                .addGap(128, 128, 128)
+                                .addComponent(jLabel18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLableUname)
+                                .addGap(128, 128, 128))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabelSuccess, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(167, 167, 167))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -503,7 +507,9 @@ public class POS extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelSuccess, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
@@ -535,10 +541,30 @@ public class POS extends javax.swing.JFrame {
         tb1 = (DefaultTableModel)jTable1.getModel();
            
         String pcode = jTFProduct_Code.getText();
-//        String pName = jTFProduct_Name.getText();             
+        String pName = jTFProduct_Name.getText();
+        String strPrice = jTFPrice.getText();
+        String qty = jTFQty.getText();
         
         if (pcode.isEmpty()) {
             jLabelError.setText("Enter product code and then press Enter!");
+            errorMessageTimer.start();
+            return;
+        }
+        
+        if (pName.isEmpty()) {
+            jLabelError.setText("Enter product name!");
+            errorMessageTimer.start();
+            return;
+        }
+        
+        if (strPrice.isEmpty()) {
+            jLabelError.setText("Enter product price!");
+            errorMessageTimer.start();
+            return;
+        }
+        
+        if (qty.isEmpty()) {
+            jLabelError.setText("Enter product qty!");
             errorMessageTimer.start();
             return;
         }
@@ -574,7 +600,7 @@ public class POS extends javax.swing.JFrame {
                     return;
 
                 }else if(current_qty < 10){
-                    jLabelError.setText("Less than 10 items available!!! Please restock!!!");
+                    jLabelError.setText(current_qty +" items available!!! Please restock!!!");
                     errorMessageTimer.start();
                     
                     int price = Integer.parseInt(jTFPrice.getText());
@@ -703,8 +729,9 @@ public class POS extends javax.swing.JFrame {
                 rs = insert.executeQuery();
                 
                 if(rs.next() == false){
-                
-                    JOptionPane.showMessageDialog(this, "Barcode not found!!!");
+                    jLabelError.setText("Product code not found!!!");
+//                    JOptionPane.showMessageDialog(this, "Barcode not found!!!");
+                    
                     
                 }else{
                 
@@ -730,49 +757,67 @@ public class POS extends javax.swing.JFrame {
     private void jButon_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButon_DeleteActionPerformed
      
         errorMessage();
+    
+    if (jTable1.getRowCount() == 0) {
+        jLabelError.setText("No items to delete!");
+        errorMessageTimer.start();
+        return;
+    }
+    
+    int selectedRow = jTable1.getSelectedRow();
+    if (selectedRow == -1) {
+        jLabelError.setText("Please select item to Delete!");
+        errorMessageTimer.start();
+        return;
+    }
+    
+    // Get id (barcode) before potential deletion
+    tb1 = (DefaultTableModel) jTable1.getModel(); // Ensure tb1 is set
+    String idStr = tb1.getValueAt(selectedRow, 0).toString(); // Get barcode
+    int id;
+    try {
+        id = Integer.parseInt(idStr); // Try to parse, assuming barcode is numeric
+    } catch (NumberFormatException e) {
+        jLabelError.setText("Invalid barcode format for deletion!");
+        errorMessageTimer.start();
+        return;
+    }
+    
+    // Show confirmation dialog first
+    int dialogResult = JOptionPane.showConfirmDialog(null, "Do you want to Delete product item from table?","Warning",JOptionPane.YES_NO_OPTION);
+    
+    if(dialogResult == JOptionPane.YES_OPTION){
+        // Remove row from table
+        tb1.removeRow(selectedRow);
         
-        DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
-        int selectIndex = jTable1.getSelectedRow();
-        if (selectIndex == -1) {
-            jLabelError.setText("Please select item to Delete!");
-            errorMessageTimer.start();
-            return;
-        }
-        
-        tb1.removeRow(jTable1.getSelectedRow());
-        
+        // Recalculate subtotal
         int del = 0;
-        
         for(int i = 0; i < jTable1.getRowCount(); i++){
-                        
-            del = del + Integer.parseInt(jTable1.getValueAt(i, 4).toString());
-                        
+            del += Integer.parseInt(jTable1.getValueAt(i, 4).toString());
         }
-        
         jTFSubT.setText(Integer.toString(del));
         
-        int id = Integer.parseInt(d.getValueAt(selectIndex, 0).toString());
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Do you want to Delete the Record?","Warning",JOptionPane.YES_NO_OPTION);
-        
-        if(dialogResult == JOptionPane.YES_OPTION){
-        
-            try {
-                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");
-                String sql = "Delete from Sales WHERE id = ?";
-                stm = conn.prepareStatement(sql);
-                stm.setInt(1, id);
-                stm.executeUpdate();
+        // Database deletion (assuming this is needed, though per previous, should be deferred)
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");
+            String sql = "Delete from Sales WHERE id = ?";
+            stm = conn.prepareStatement(sql);
+            stm.setInt(1, id);
+            stm.executeUpdate();
 
-                JOptionPane.showMessageDialog(null,"Product Deleted!");
+            jLabelSuccess.setText("Product Deleted!");
+            errorMessageTimer.start();
 
-                conn.close();
-
-
-            } catch (SQLException ex) {
-                Logger.getLogger(Product.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Product.class.getName()).log(Level.SEVERE, null, ex);
+            jLabelError.setText("Database error during deletion: " + ex.getMessage());
+            errorMessageTimer.start();
         }
+    } else {
+        jLabelError.setText("Deletion cancelled.");
+        errorMessageTimer.start();
+    }
         
     }//GEN-LAST:event_jButon_DeleteActionPerformed
 
@@ -789,7 +834,9 @@ public class POS extends javax.swing.JFrame {
         
         
         if (cashier.isEmpty() || subtot.isEmpty() || pay.isEmpty()  || balance.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "All fields are required!");
+//            JOptionPane.showMessageDialog(null, "All fields are required!");
+            jLabelError.setText("All fields are required!");
+            errorMessageTimer.start();
             return;
         }
         
@@ -859,7 +906,8 @@ public class POS extends javax.swing.JFrame {
             }
             
             insert.addBatch();
-            JOptionPane.showMessageDialog(this, "Record Saved!!");
+//            JOptionPane.showMessageDialog(this, "Record Saved!!");
+            jLabelSuccess.setText("Record Saved!!");
             
         } catch (SQLException ex) {
             Logger.getLogger(POS.class.getName()).log(Level.SEVERE, null, ex);
@@ -936,7 +984,8 @@ public class POS extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButon_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButon_UpdateActionPerformed
-       if (jTable1.getRowCount() == 0) {
+        errorMessage();
+        if (jTable1.getRowCount() == 0) {
             jLabelError.setText("Table is empty, nothing to update!");
             errorMessageTimer.start();
             return;
@@ -955,9 +1004,10 @@ public class POS extends javax.swing.JFrame {
             errorMessageTimer.start();
             return;
         }
-
+        
         try {
             int newQty = Integer.parseInt(newQtyStr);
+            
             if (newQty <= 0) {
                 jLabelError.setText("Quantity must be greater than 0!");
                 errorMessageTimer.start();
@@ -972,12 +1022,21 @@ public class POS extends javax.swing.JFrame {
                 stm = conn.prepareStatement("SELECT Qty FROM Product WHERE Barcode = ?");
                 stm.setString(1, barcode);
                 rs = stm.executeQuery();
+                
+                
 
                 if (rs.next()) {
                     int currentStock = rs.getInt("Qty");
                     int originalQty = Integer.parseInt(tb1.getValueAt(selectedRow, 3).toString());
                     int stockAdjustment = originalQty - newQty;
                     int newStock = currentStock + stockAdjustment;
+                    int maxAllow = currentStock;
+                    
+                    if (newQty > maxAllow) {
+                        jLabelError.setText("Insufficient stock! Max allowed: " + maxAllow);
+                        errorMessageTimer.start();
+                        return;
+                    }
 
                     if (newStock < 0) {
                         int maxAllowed = currentStock + originalQty;
@@ -1002,9 +1061,10 @@ public class POS extends javax.swing.JFrame {
                             jTFProduct_Name.setText("");
                             jTFPrice.setText("");
                             jTFQty.setText("");
-//                            jLabelError.setText("Item updated in sale!");
+                            jLabelSuccess.setText("Item updated in sale!");
 //                            errorMessageTimer.start();
-                            JOptionPane.showMessageDialog(null, "Item updated successfully!");
+//                            JOptionPane.showMessageDialog(null, "Item updated successfully!");
+
                         }
                     }
                 } else {
@@ -1089,6 +1149,7 @@ public class POS extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelError;
+    private javax.swing.JLabel jLabelSuccess;
     private javax.swing.JLabel jLableDate;
     private javax.swing.JLabel jLableTime;
     private javax.swing.JLabel jLableUname;
