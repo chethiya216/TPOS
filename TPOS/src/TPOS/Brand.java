@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.util.Vector;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -32,6 +33,10 @@ public class Brand extends javax.swing.JFrame {
 
     PreparedStatement pst;
     Connection conn;
+    DefaultTableModel d;
+    ResultSet rs;
+    Timer errorMessageTimer;
+    private final int MESSAGE_DURATION = 5000;
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -60,6 +65,7 @@ public class Brand extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton6 = new javax.swing.JButton();
+        jLabelError = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -241,6 +247,9 @@ public class Brand extends javax.swing.JFrame {
             }
         });
 
+        jLabelError.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabelError.setForeground(new java.awt.Color(255, 51, 51));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -258,6 +267,8 @@ public class Brand extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(300, 300, 300)
+                                .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -275,7 +286,9 @@ public class Brand extends javax.swing.JFrame {
                         .addComponent(jLabel8))
                     .addComponent(jButton6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelError, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -287,6 +300,14 @@ public class Brand extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void errorMessage(){
+        errorMessageTimer = new Timer(MESSAGE_DURATION,e ->{
+            jLabelError.setText("");
+            errorMessageTimer.stop();
+        } );
+        errorMessageTimer.setRepeats(false);
+    }
+    
     private void show_table_data(){
     
         int c;
@@ -327,18 +348,45 @@ public class Brand extends javax.swing.JFrame {
     }
     
     private void jButton_AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddActionPerformed
-       
+        errorMessage();
+        
         String brand = jTFBrand.getText();
         String status = jCBStatus.getSelectedItem().toString();
+//        d = (DefaultTableModel)jTable1.getModel();
+//        int selectedIndex = jTable1.getSelectedRow();
+        
+        if (brand.isEmpty()) {
+            jLabelError.setText("Please eneter Brand name!");
+            errorMessageTimer.start();
+            return;
+        }
+        
         
         try {
             
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");  //connects with the database
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");  //connects with the database
+            String checkSql = "SELECT Brand FROM Brand WHERE Brand = ?";
+            pst = conn.prepareStatement(checkSql);
+            pst.setString(1, brand);
+            rs = pst.executeQuery();
+            
+            if (rs.next()) {
+                jLabelError.setText("Brand is already Added!");
+                errorMessageTimer.start();
+                return;
+            }
+            
+//            if (selectedIndex == -1) {
+//                jLabelError.setText("Please enter Brand name!");
+//                errorMessageTimer.start();
+//                return;
+//            }
+            
             String sql = "INSERT INTO Brand(Brand, Status) VALUES (?, ?)"; //inserts data into database
-            PreparedStatement stm = conn.prepareStatement(sql); //prepares a statement to run the query instead of compiling first
-            stm.setString(1, brand); //set values
-            stm.setString(2, status); //set values
-            stm.executeUpdate(); // runs the sql statement
+            pst = conn.prepareStatement(sql); //prepares a statement to run the query instead of compiling first
+            pst.setString(1, brand); //set values
+            pst.setString(2, status); //set values
+            pst.executeUpdate(); // runs the sql statement
             JOptionPane.showMessageDialog(null,"Brand added!"); //displays message
              
             jTFBrand.setText(""); //refreshes data fields
@@ -361,10 +409,18 @@ public class Brand extends javax.swing.JFrame {
         
         DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
         int selectIndex = jTable1.getSelectedRow();
-            
+        
+        if (selectIndex == -1) {
+            jLabelError.setText("Please select a Brand to update!");
+            errorMessageTimer.start();
+            return;
+        }
+        
         int id = Integer.parseInt(d.getValueAt(selectIndex, 0).toString());
         String brand = jTFBrand.getText();
         String status = jCBStatus.getSelectedItem().toString();
+        
+        
         
         try {
 
@@ -404,10 +460,17 @@ public class Brand extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButon_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButon_DeleteActionPerformed
+        errorMessage();
         
         DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
-        
         int selectIndex = jTable1.getSelectedRow();
+        
+        if (selectIndex == -1) {
+            jLabelError.setText("Please select a Brand to Delete!");
+            errorMessageTimer.start();
+            return;
+        }
+        
         int id = Integer.parseInt(d.getValueAt(selectIndex, 0).toString());
         int dialogResult = JOptionPane.showConfirmDialog(null, "Do you want to Delete the Record?","Warning",JOptionPane.YES_NO_OPTION);
         
@@ -517,6 +580,7 @@ public class Brand extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelError;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;

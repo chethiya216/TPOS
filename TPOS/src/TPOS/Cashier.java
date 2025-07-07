@@ -403,6 +403,12 @@ public class Cashier extends javax.swing.JFrame {
         String pass = jPFPassword.getText();
         String status = jCBStatus.getSelectedItem().toString();
         
+        if (user.isEmpty()) {
+            jLabelError.setText("Please enter Cashier Name!");
+            errorMessageTimer.start();
+            return;
+        }
+        
         try {
             
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");  //connects with the database
