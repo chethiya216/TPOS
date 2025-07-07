@@ -533,7 +533,6 @@ public class POS extends javax.swing.JFrame {
     private void pos(){
         errorMessage();
         tb1 = (DefaultTableModel)jTable1.getModel();
-        int selectIndex = jTable1.getSelectedRow();
            
         String pcode = jTFProduct_Code.getText();
 //        String pName = jTFProduct_Name.getText();             
