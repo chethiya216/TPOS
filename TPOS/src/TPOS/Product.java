@@ -421,7 +421,7 @@ public class Product extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Product Name", "Desc", "Category", "Brand", "Cost Price", "Retail Price", "Qty", "Barcode", "Status"
+                "ID", "Barcode", "Product Name", "Desc", "Category", "Brand", "Cost Price", "Retail Price", "Qty", "Status"
             }
         ));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -534,7 +534,7 @@ public class Product extends javax.swing.JFrame {
             
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TPOS", "root", "");
             pst = conn.prepareStatement("select * from product");
-            ResultSet rs = pst.executeQuery();
+            rs = pst.executeQuery();
             
             ResultSetMetaData rsd = rs.getMetaData();
             c = rsd.getColumnCount();
@@ -549,6 +549,7 @@ public class Product extends javax.swing.JFrame {
                 for(int i=1; i<=c; i++){
                 
                     v2.add(rs.getString("id"));
+                    v2.add(rs.getString("barcode"));
                     v2.add(rs.getString("product_name"));
                     v2.add(rs.getString("description"));
                     v2.add(rs.getString("category"));
@@ -556,7 +557,6 @@ public class Product extends javax.swing.JFrame {
                     v2.add(rs.getString("cost_price"));
                     v2.add(rs.getString("retail_price"));
                     v2.add(rs.getString("qty"));
-                    v2.add(rs.getString("barcode"));
                     v2.add(rs.getString("status"));
                 
                 }  
@@ -610,17 +610,17 @@ public class Product extends javax.swing.JFrame {
                 return;
             }
             
-            String sql = "INSERT INTO product(Product_Name, Description, Category, Brand, Cost_Price, Retail_Price, Qty, Barcode, Status) VALUES (?,?,?,?,?,?,?,?,?)"; //inserts data into database
+            String sql = "INSERT INTO product(Barcode, Product_Name, Description, Category, Brand, Cost_Price, Retail_Price, Qty, Status) VALUES (?,?,?,?,?,?,?,?,?)"; //inserts data into database
             stm = conn.prepareStatement(sql); //prepares a statement to run the query instead of compiling first
             
-            stm.setString(1, product); //set values
-            stm.setString(2, des);//set values
-            stm.setString(3, cat.name);
-            stm.setString(4, brand.name);
-            stm.setString(5, cost);
-            stm.setString(6, retail);
-            stm.setString(7, qty);
-            stm.setString(8, bcode);
+            stm.setString(1, bcode);
+            stm.setString(2, product); //set values
+            stm.setString(3, des);//set values
+            stm.setString(4, cat.name);
+            stm.setString(5, brand.name);
+            stm.setString(6, cost);
+            stm.setString(7, retail);
+            stm.setString(8, qty);
             stm.setString(9, status);
             
             stm.executeUpdate(); // runs the sql statement
@@ -726,11 +726,12 @@ public class Product extends javax.swing.JFrame {
         DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
         int selectIndex = jTable1.getSelectedRow();
         
-        jTFProduct_Name.setText(d.getValueAt(selectIndex, 1).toString());
-        jTextAreaDescription.setText(d.getValueAt(selectIndex, 2).toString());
+        jTFBarcode.setText(d.getValueAt(selectIndex, 1).toString());
+        jTFProduct_Name.setText(d.getValueAt(selectIndex, 2).toString());
+        jTextAreaDescription.setText(d.getValueAt(selectIndex, 3).toString());
 
-        String selectedCategory = d.getValueAt(selectIndex, 3).toString();
-        String selectedBrand = d.getValueAt(selectIndex, 4).toString();
+        String selectedCategory = d.getValueAt(selectIndex, 4).toString();
+        String selectedBrand = d.getValueAt(selectIndex, 5).toString();
         
         // Match the category in the combo box by name
         for (int i = 0; i < jCBCategory.getItemCount(); i++) {
@@ -750,10 +751,9 @@ public class Product extends javax.swing.JFrame {
             }
         }
         
-        jTFCostPrice.setText(d.getValueAt(selectIndex, 5).toString());
-        jTFRetailPrice.setText(d.getValueAt(selectIndex, 6).toString());
-        jTFQty.setText(d.getValueAt(selectIndex, 7).toString());
-        jTFBarcode.setText(d.getValueAt(selectIndex, 8).toString());
+        jTFCostPrice.setText(d.getValueAt(selectIndex, 6).toString());
+        jTFRetailPrice.setText(d.getValueAt(selectIndex, 7).toString());
+        jTFQty.setText(d.getValueAt(selectIndex, 8).toString());
         jCBStatus.setSelectedItem(d.getValueAt(selectIndex, 9).toString());
         
     
