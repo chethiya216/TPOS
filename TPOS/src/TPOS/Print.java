@@ -35,7 +35,7 @@ public class Print extends javax.swing.JFrame {
         jTFPrint.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
         StringBuilder receipt = new StringBuilder();
-        int totalWidth = 60; // Total receipt width
+        int totalWidth = 50; // Total receipt width
 
         // Calculate maximum lengths for each column
         int maxItemLength = "ITEM".length();
@@ -75,8 +75,8 @@ public class Print extends javax.swing.JFrame {
         receipt.append(centerText("123 Main Street, City", totalWidth)).append("\n");
         receipt.append(centerText("Phone: (123) 456-7890", totalWidth)).append("\n\n");
         receipt.append(centerText(dateTime, totalWidth)).append("\n");
-        receipt.append(String.format("%-20s %s", "Transaction ID:", transactionId)).append("\n");
-        receipt.append(String.format("%-20s %s", "Cashier:", cashierName)).append("\n");
+        receipt.append(String.format("%10s %s", "Transaction ID:", transactionId)).append("\n");
+        receipt.append(String.format("%10s %s", "Cashier:", cashierName)).append("\n");
         receipt.append("-".repeat(totalWidth)).append("\n");
 
         // Column headers with dynamic spacing
@@ -101,10 +101,10 @@ public class Print extends javax.swing.JFrame {
 
         // Footer section
         receipt.append("-".repeat(totalWidth)).append("\n");
-        receipt.append(String.format("%-20s %10d", "TOTAL ITEMS:", totalItems)).append("\n");
-        receipt.append(String.format("%-20s %s", "SUBTOTAL:", formatCurrency(sub))).append("\n");
-        receipt.append(String.format("%-20s %s", "PAYMENT:", formatCurrency(pay))).append("\n");
-        receipt.append(String.format("%-20s %s", "BALANCE:", formatCurrency(bal))).append("\n");
+        receipt.append(String.format("%20s %10d", "TOTAL ITEMS:", totalItems)).append("\n");
+        receipt.append(String.format("%20s %s", "SUBTOTAL:", formatCurrency(sub))).append("\n");
+        receipt.append(String.format("%20s %s", "PAYMENT:", formatCurrency(pay))).append("\n");
+        receipt.append(String.format("%20s %s", "BALANCE:", formatCurrency(bal))).append("\n");
         receipt.append("=".repeat(totalWidth)).append("\n");
         receipt.append(centerText("Thank you for shopping with us!", totalWidth)).append("\n");
         receipt.append(centerText("Returns accepted within 7 days with receipt", totalWidth)).append("\n");
