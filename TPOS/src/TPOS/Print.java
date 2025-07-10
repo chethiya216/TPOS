@@ -4,6 +4,7 @@
  */
 package TPOS;
 
+import java.awt.Font;
 import java.awt.print.PrinterException;
 import javax.swing.table.TableModel;
 
@@ -26,47 +27,109 @@ public class Print extends javax.swing.JFrame {
     String lbal;
     String qty;
     
-    public Print(String sub, String pay,String bal,String qty,TableModel tableModel) throws PrinterException {
+    public Print(String sub, String pay, String bal, TableModel tableModel, 
+             String cashierName, String transactionId, String dateTime) throws PrinterException {
         initComponents();
-        
-        this.lsub = sub;
-        this.lpay = pay;
-        this.lbal = bal;
-        this.qty = qty;
-        
 
-        jTFPrint.setText(jTFPrint.getText()+ "***********************************************************\n");
-        jTFPrint.setText(jTFPrint.getText()+ "******************* TransactEase POS ******************\n");
-        jTFPrint.setText(jTFPrint.getText()+ "\n");
-        jTFPrint.setText(jTFPrint.getText()+ "Product" + "\t" + "       Price" + "\t" + "   Qty" + "\t" +"Total" + "\n");
-        
-        for(int i = 0; i<tableModel.getRowCount(); i++){
-        
-            String product = (String) tableModel.getValueAt(i, 1);
-            String price = (String) tableModel.getValueAt(i, 2);
-            String bqty = (String) tableModel.getValueAt(i, 3);
+        // Set monospaced font for proper alignment
+        jTFPrint.setFont(new Font("Monospaced", Font.PLAIN, 12));
+
+        StringBuilder receipt = new StringBuilder();
+        int totalWidth = 60; // Total receipt width
+
+        // Calculate maximum lengths for each column
+        int maxItemLength = "ITEM".length();
+        int maxPriceLength = "PRICE".length();
+        int maxQtyLength = "QTY".length();
+        int maxTotalLength = "TOTAL".length();
+
+        int totalItems = 0;
+        double subtotalValue = 0;
+
+        // Scan table to determine maximum column widths
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            String product = String.valueOf(tableModel.getValueAt(i, 1));
+            String price = formatCurrency(String.valueOf(tableModel.getValueAt(i, 2)));
+            String qty = String.valueOf(tableModel.getValueAt(i, 3));
             int total = (int) tableModel.getValueAt(i, 4);
-            
-            jTFPrint.setText(jTFPrint.getText()+ product + "\t" + "       " +price + "\t" + "     "+bqty + "\t"+ total+ "  \n" );
+            String totalStr = formatCurrency(String.valueOf(total));
 
+            maxItemLength = Math.max(maxItemLength, product.length() > 20 ? 20 : product.length());
+            maxPriceLength = Math.max(maxPriceLength, price.length());
+            maxQtyLength = Math.max(maxQtyLength, qty.length());
+            maxTotalLength = Math.max(maxTotalLength, totalStr.length());
+
+            totalItems += Integer.parseInt(qty);
+            subtotalValue += total;
         }
-        
-        jTFPrint.setText(jTFPrint.getText()+ "\n");
-        jTFPrint.setText(jTFPrint.getText()+ "\n");
 
-        
-        jTFPrint.setText(jTFPrint.getText()+ "               " + "SubTotal : " + sub + "\n");
-        jTFPrint.setText(jTFPrint.getText()+ "               " + "Pay : " + pay + "\n");
-        jTFPrint.setText(jTFPrint.getText()+ "               " + "Balance : " + bal + "\n");
-        
-        jTFPrint.setText(jTFPrint.getText()+ "\n");
-        
-        jTFPrint.setText(jTFPrint.getText()+ "***********************************************************\n");
-        jTFPrint.setText(jTFPrint.getText()+ "                      Thank You!!!, Come Again...\n"); 
-        jTFPrint.setText(jTFPrint.getText()+ "***********************************************************\n");
-        
+        // Ensure minimum widths for headers
+        maxItemLength = Math.max(maxItemLength, "ITEM".length());
+        maxPriceLength = Math.max(maxPriceLength, "PRICE".length());
+        maxQtyLength = Math.max(maxQtyLength, "QTY".length());
+        maxTotalLength = Math.max(maxTotalLength, "TOTAL".length());
+
+        // Header section
+        receipt.append("=".repeat(totalWidth)).append("\n");
+        receipt.append(centerText("CMart Store", totalWidth)).append("\n");
+        receipt.append(centerText("123 Main Street, City", totalWidth)).append("\n");
+        receipt.append(centerText("Phone: (123) 456-7890", totalWidth)).append("\n\n");
+        receipt.append(centerText(dateTime, totalWidth)).append("\n");
+        receipt.append(String.format("%-20s %s", "Transaction ID:", transactionId)).append("\n");
+        receipt.append(String.format("%-20s %s", "Cashier:", cashierName)).append("\n");
+        receipt.append("-".repeat(totalWidth)).append("\n");
+
+        // Column headers with dynamic spacing
+        String headerFormat = "%-" + maxItemLength + "s %-" + maxPriceLength + "s %" + maxQtyLength + "s %" + maxTotalLength + "s";
+        receipt.append(String.format(headerFormat, "ITEM", "PRICE", "QTY", "TOTAL")).append("\n");
+        receipt.append("-".repeat(totalWidth)).append("\n");
+
+        // Item rows
+        String rowFormat = "%-" + maxItemLength + "s %-" + maxPriceLength + "s %" + maxQtyLength + "s %" + maxTotalLength + "s";
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            String product = String.valueOf(tableModel.getValueAt(i, 1));
+            if (product.length() > maxItemLength) {
+                product = product.substring(0, maxItemLength - 3) + "...";
+            }
+            String price = formatCurrency(String.valueOf(tableModel.getValueAt(i, 2)));
+            String qty = String.valueOf(tableModel.getValueAt(i, 3));
+            int total = (int) tableModel.getValueAt(i, 4);
+            String totalStr = formatCurrency(String.valueOf(total));
+
+            receipt.append(String.format(rowFormat, product, price, qty, totalStr)).append("\n");
+        }
+
+        // Footer section
+        receipt.append("-".repeat(totalWidth)).append("\n");
+        receipt.append(String.format("%-20s %10d", "TOTAL ITEMS:", totalItems)).append("\n");
+        receipt.append(String.format("%-20s %s", "SUBTOTAL:", formatCurrency(sub))).append("\n");
+        receipt.append(String.format("%-20s %s", "PAYMENT:", formatCurrency(pay))).append("\n");
+        receipt.append(String.format("%-20s %s", "BALANCE:", formatCurrency(bal))).append("\n");
+        receipt.append("=".repeat(totalWidth)).append("\n");
+        receipt.append(centerText("Thank you for shopping with us!", totalWidth)).append("\n");
+        receipt.append(centerText("Returns accepted within 7 days with receipt", totalWidth)).append("\n");
+        receipt.append(centerText("Visit us online: www.cmart.com", totalWidth)).append("\n");
+        receipt.append("=".repeat(totalWidth)).append("\n");
+
+        jTFPrint.setText(receipt.toString());
         jTFPrint.print();
-        
+    }
+    
+    private String formatCurrency(String amount) {
+        try {
+            double value = Double.parseDouble(amount);
+            return String.format("Rs: %,.2f", value);
+        } catch (NumberFormatException e) {
+            return amount; // Return original if formatting fails
+        }
+    }
+    
+    private String centerText(String text, int width) {
+        if (text.length() >= width) {
+            return text.substring(0, width);
+        }
+        int padding = (width - text.length()) / 2;
+        return " ".repeat(padding) + text + " ".repeat(width - text.length() - padding);
     }
     
 

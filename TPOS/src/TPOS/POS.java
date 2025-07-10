@@ -20,6 +20,8 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DateFormatter;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.Timer;
 
 /**
@@ -933,13 +935,33 @@ public class POS extends javax.swing.JFrame {
     
     public void print(){
     
+//        String sub = jTFSubT.getText();
+//        String pay = jTFPay.getText();
+//        String bal = jTFBalance.getText();
+//        String bqty = jTFQty.getText();
+//        
+//        try {
+//            new Print(sub,pay,bal,bqty,jTable1.getModel()).setVisible(true);
+//        } catch (PrinterException ex) {
+//            Logger.getLogger(POS.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+
         String sub = jTFSubT.getText();
         String pay = jTFPay.getText();
         String bal = jTFBalance.getText();
-        String bqty = jTFQty.getText();
-        
+
+        // Generate transaction ID and date time
+        long transId = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateTime = sdf.format(new Date());
+
+        // Get cashier name (you'll need to implement this)
+        String cashierName = getCurrentCashier(); 
+
         try {
-            new Print(sub,pay,bal,bqty,jTable1.getModel()).setVisible(true);
+            // Pass all required parameters
+            new Print(sub, pay, bal, jTable1.getModel(), cashierName, 
+                     String.valueOf(transId), dateTime).setVisible(true);
         } catch (PrinterException ex) {
             Logger.getLogger(POS.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -948,6 +970,12 @@ public class POS extends javax.swing.JFrame {
         
     }
     
+    private String getCurrentCashier() {
+        // Replace with your actual implementation
+        // This could come from login information or a configuration
+        String Uname = jLableUname.getText() ;
+        return Uname; 
+    }
     
     private void jButon_PayInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButon_PayInvoiceActionPerformed
         
